@@ -1,0 +1,13 @@
+# Core data pipeline
+requests
+pandas
+numpy
+python-dateutil
+python-dotenv
+
+# Database (SQL Server via ODBC)
+SQLAlchemy>=2.0
+pyodbc
+
+# Optional helpers
+tqdm
