@@ -35,6 +35,5 @@ data/
 *.log
 
 # ---- Power BI ----
-*.pbix
-dashboards/docs/*.png
-dashboards/docs/*.jpg
+*.pbix           # do NOT commit PBIX (often contains data/credentials)
+!*.pbit          # allow Power BI templates (no data)

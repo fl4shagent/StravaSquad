@@ -25,6 +25,12 @@ It securely onboards runners via OAuth, ingests activities (1-second GPS streams
 
 ---
 
+
+## Demo
+
+![Weekly squad heatmap](dashboards/docs/heatmap_week.png)
+![Squad tracker overview](dashboards/docs/squad_tracker.png)
+
 ## Quick start
 > Minimal local setup to run the code that’s in `src/` and `scripts/` (once added).
 
