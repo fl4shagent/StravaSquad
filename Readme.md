@@ -23,7 +23,7 @@ Aggregated squad KPIs (total distance, total time) with drilldowns from squad-le
 ---
 
 ## Features
-- 🔐 **Secure multi-user onboarding** via Strava OAuth (access/refresh tokens, athlete ID, expiry)
+- 🔐 **Secure multi-user onboarding** via Strava OAuth (access/refresh tokens, athlete ID, expiry) - Helper API website: https://dungdinh301.github.io/stravarunning/
 - ⛓️ **Incremental ingestion** of activities, 1s GPS streams, segments, and best efforts
 - 🧮 **Data mart transformations**: cadence, distance-based splits, type-safe cleaning
 - 🧱 **SQL-backed warehouse** with bulk inserts and deduplication
