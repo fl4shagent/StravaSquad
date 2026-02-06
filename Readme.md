@@ -1,39 +1,45 @@
 # StravaSquad 🏃‍♀️🏃‍♂️
 
 **StravaSquad** is a multi-runner analytics pipeline and dashboard for Strava data.  
-It securely onboards runners via OAuth, ingests activities (1-second GPS streams, segments, best efforts), enriches them (cadence, distance splits, type-safe cleaning), stores in SQL, and powers squad-level dashboards (weekly heatmaps, team totals, per-runner volume).
+It securely onboards runners via OAuth, ingests activity data (1-second GPS streams, segments, best efforts), enriches and cleans the data, stores it in SQL, and powers squad-level analytics dashboards.
 
-**Scale (today):** 10 runners • ~40 activities/week • ~1M GPS points  
-**Built for:** easy growth to 100+ runners with partitioned storage, idempotent upserts, and rate-limit-aware ingestion.
+
+
+**Current scale:** 10 runners • ~40 activities/week • ~1M GPS points  
+**Designed for:** scaling to 100+ runners with incremental ingestion, idempotent upserts, and rate-limit–aware API usage.
+**Date:** Data is last updated on October, 2025.
+
+---
+**Weekly Squad Heatmap**  
+Visualizes training volume and intensity across runners by week, highlighting consistency and spikes in workload.
+
+![Weekly squad heatmap](dashboard/Individual.jpeg)
+
+**Squad Tracker Overview**  
+Aggregated squad KPIs (total distance, total time) with drilldowns from squad-level metrics to individual runner activity.
+
+![Squad tracker overview](dashboard/Weekly.jpeg)
 
 ---
 
 ## Features
-- 🔐 **Multi-user onboarding** (Strava OAuth: access/refresh tokens, athlete ID, expiry)
-- ⛓️ **Ingestion** of activities + 1s GPS streams, segments, best efforts (Strava API v3)
-- 🧮 **Data Mart**: cadence, distance-based splits, consistent datatypes
-- 🧱 **SQL-backed** storage with upserts & incremental syncs
-- 📊 **Dashboards**: weekly squad heatmaps, total time/distance, per-runner volume
+- 🔐 **Secure multi-user onboarding** via Strava OAuth (access/refresh tokens, athlete ID, expiry)
+- ⛓️ **Incremental ingestion** of activities, 1s GPS streams, segments, and best efforts
+- 🧮 **Data mart transformations**: cadence, distance-based splits, type-safe cleaning
+- 🧱 **SQL-backed warehouse** with bulk inserts and deduplication
+- 📊 **Power BI dashboards**: weekly heatmaps, squad totals, per-runner volume
 
 ---
 
-## Architecture (high level)
-1. **Helper web app** collects OAuth tokens securely.
-2. **Ingestion jobs** pull activities & streams and write to a raw warehouse.
-3. **Transforms** build a curated Data Mart (cadence, splits, clean types).
-4. **BI layer** (Power BI) connects to SQL for squad analytics.
+## Architecture Overview (Pipeline)
 
----
-
-
-## Demo
-
-![Weekly squad heatmap](dashboards/docs/heatmap_week.png)
-![Squad tracker overview](dashboards/docs/squad_tracker.png)
-
-## Quick start
-> Minimal local setup to run the code that’s in `src/` and `scripts/` (once added).
-
-1. Create a virtual environment and install deps:
-   ```bash
-   pip install -r requirements.txt
+```mermaid
+flowchart LR
+    A[User Consent<br/>Strava OAuth] --> B[OAuth Helper Web App]
+    B --> C[strava_profile_crawl.py<br/>Access + Refresh Tokens]
+    C --> D[strava_api_downloader.py<br/>Activities & Streams]
+    D --> E[datawarehouse.py<br/>Raw Storage]
+    E --> F[datamart.py<br/>Clean & Enrich]
+    F --> G[datamart_to_sql.py<br/>Bulk Insert]
+    G --> H[(Postgres SQL)]
+    H --> I[Power BI Dashboards]
