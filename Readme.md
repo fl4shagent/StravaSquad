@@ -9,6 +9,9 @@ It securely onboards runners via OAuth, ingests activity data (1-second GPS stre
 **Designed for:** scaling to 100+ runners with incremental ingestion, idempotent upserts, and rate-limit–aware API usage.
 **Date:** Data is last updated on October, 2025.
 
+**ETL Workflow **
+[ETL Workflow](dashboard/worflow.png)
+
 ---
 **Weekly Squad Heatmap**  
 Visualizes training volume and intensity across runners by week, highlighting consistency and spikes in workload.
@@ -21,13 +24,21 @@ Aggregated squad KPIs (total distance, total time) with drilldowns from squad-le
 ![Squad tracker overview](dashboard/Weekly.jpeg)
 
 ---
+Individual Dashboard
+Designed for athlete-level performance review:
+    -Session bubble chart (last 30 days) to spot training patterns and volume
+    -Personal-best segments (e.g., 400m, 1K, 1 mile, 5K, etc.)
+    -Per-run overview: distance, total time, pace-by-kilometer breakdown
+    -Time series: heart rate + watts by time to inspect effort and pacing stability
 
-## Features
-- 🔐 **Secure multi-user onboarding** via Strava OAuth (access/refresh tokens, athlete ID, expiry) - Helper API website: https://dungdinh301.github.io/stravarunning/
-- ⛓️ **Incremental ingestion** of activities, 1s GPS streams, segments, and best efforts
-- 🧮 **Data mart transformations**: cadence, distance-based splits, type-safe cleaning
-- 🧱 **SQL-backed warehouse** with bulk inserts and deduplication
-- 📊 **Power BI dashboards**: weekly heatmaps, squad totals, per-runner volume
+Squad / Weekly Dashboard
+Designed for team performance monitoring:
+
+    -Athletes training today + latest run feed (quick daily visibility)
+    -Weekly KPIs: total distance / total runtime / run count with week-over-week deltas
+    -Scatterplot: athlete volume vs running distance
+    -Squad weekly distance trend for consistency / spikes
+    -Weekly route map overview for spatial context
 
 ---
 
