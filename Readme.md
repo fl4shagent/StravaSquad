@@ -10,7 +10,7 @@ It securely onboards runners via OAuth, ingests activity data (1-second GPS stre
 **Date:** Data is last updated on October, 2025.
 
 **ETL Workflow **
-[ETL Workflow](dashboard/worflow.png)
+[ETL Workflow](dashboard/workflow.png)
 
 ---
 **Weekly Squad Heatmap**  
