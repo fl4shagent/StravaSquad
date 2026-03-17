@@ -13,15 +13,17 @@ It securely onboards runners via OAuth, ingests activity data (1-second GPS stre
 [ETL Workflow](dashboard/workflow.png)
 
 ---
-**Weekly Squad Heatmap**  
+**Weekly Individual Tracker**  
 Visualizes training volume and intensity across runners by week, highlighting consistency and spikes in workload.
 
-![Weekly squad heatmap](dashboard/Individual.jpeg)
+![Weekly Individual Tracker](dashboard/Individual.jpeg)
+![Weekly Individual Tracker 2](dashboard/Individual2.png)
 
 **Squad Tracker Overview**  
 Aggregated squad KPIs (total distance, total time) with drilldowns from squad-level metrics to individual runner activity.
 
 ![Squad tracker overview](dashboard/Weekly.jpeg)
+![Squad tracker overview2](dashboard/Weekly2.png)
 
 ---
 Individual Dashboard
