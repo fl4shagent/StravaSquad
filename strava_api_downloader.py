@@ -57,7 +57,7 @@ def write_gpx(latlng, times, act_name, fname):
             gpxpy.gpx.GPXTrackPoint(lat, lon, time=start + timedelta(seconds=sec))
         )
     out_path = BASE_DIR / (fname + ".gpx")
-    out_path.write_text(g.to_xml())
+    out_path.write_text(g.to_xml(), encoding="utf-8")
 
 if not TOKENS_FILE.exists():
     raise FileNotFoundError(f"{TOKENS_FILE} not found.")

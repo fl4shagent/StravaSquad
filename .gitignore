@@ -17,6 +17,9 @@ dist/
 .ipynb_checkpoints/
 .coverage
 
+# ---- Claude Code project memory / prompting docs ----
+.claude/
+
 # ---- IDE / OS ----
 .vscode/
 .idea/

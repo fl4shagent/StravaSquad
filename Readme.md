@@ -56,3 +56,18 @@ flowchart LR
     F --> G[datamart_to_sql.py<br/>Bulk Insert]
     G --> H[(Postgres SQL)]
     H --> I[Power BI Dashboards]
+```
+
+---
+
+## Medallion Architecture (`stravasquad2026/`)
+
+A bronze/silver/gold warehouse (`StravaDW`) sits alongside the existing pipeline:
+
+- **bronze** — raw mirror of the consolidated CSV exports, append-only, with an
+  `ingested_at` audit column
+- **silver** — normalized tables with primary keys/indexes, deduplicated on load
+- **gold** — placeholder for future dbt models (weekly stats, training load, PB prediction)
+
+See `stravasquad2026/sql/01_create_stravadw.sql` for the schema and
+`stravasquad2026/datamart_to_warehouse.py` for the loader.
