@@ -5,14 +5,30 @@ on:
     branches: [main]
     paths:
       - 'stravasquad2026/dbt/**'
+      - '.github/ci_seed.sql'
+      - '.github/workflows/dbt_ci.yml'
   pull_request:
     branches: [main]
     paths:
       - 'stravasquad2026/dbt/**'
+      - '.github/ci_seed.sql'
+      - '.github/workflows/dbt_ci.yml'
+
+env:
+  SA_PASSWORD: 'CI_Password_123!'
 
 jobs:
-  dbt-validate:
+  dbt-test:
     runs-on: ubuntu-latest
+
+    services:
+      sqlserver:
+        image: mcr.microsoft.com/mssql/server:2022-latest
+        env:
+          ACCEPT_EULA: 'Y'
+          MSSQL_SA_PASSWORD: ${{ env.SA_PASSWORD }}
+        ports:
+          - 1433:1433
 
     steps:
       - uses: actions/checkout@v4
@@ -21,11 +37,45 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Install ODBC driver and sqlcmd
+        run: |
+          curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | sudo tee /etc/apt/trusted.gpg.d/microsoft.asc > /dev/null
+          curl -fsSL https://packages.microsoft.com/config/ubuntu/22.04/prod.list | sudo tee /etc/apt/sources.list.d/mssql-release.list > /dev/null
+          sudo apt-get update -qq
+          sudo ACCEPT_EULA=Y apt-get install -y -qq msodbcsql17 mssql-tools unixodbc-dev
+          echo '/opt/mssql-tools/bin' >> "$GITHUB_PATH"
+
+      - name: Wait for SQL Server
+        run: |
+          for i in $(seq 1 30); do
+            sqlcmd -S localhost -U sa -P "$SA_PASSWORD" -Q "SELECT 1" > /dev/null 2>&1 && break
+            echo "Waiting for SQL Server... ($i/30)"
+            sleep 2
+          done
+
+      - name: Seed CI database and test data
+        run: sqlcmd -S localhost -U sa -P "$SA_PASSWORD" -i .github/ci_seed.sql
+
       - name: Install dbt-sqlserver
         run: pip install dbt-sqlserver==1.10.0
 
-      - name: dbt parse — validate project structure and refs
+      - name: dbt seed — load dim_distance_label
         working-directory: stravasquad2026/dbt
         env:
           DBT_PROFILES_DIR: .
-        run: dbt parse --target ci
+          CI_SQL_PASSWORD: ${{ env.SA_PASSWORD }}
+        run: dbt seed --target ci
+
+      - name: dbt run — build gold models
+        working-directory: stravasquad2026/dbt
+        env:
+          DBT_PROFILES_DIR: .
+          CI_SQL_PASSWORD: ${{ env.SA_PASSWORD }}
+        run: dbt run --target ci
+
+      - name: dbt test — run all 17 tests
+        working-directory: stravasquad2026/dbt
+        env:
+          DBT_PROFILES_DIR: .
+          CI_SQL_PASSWORD: ${{ env.SA_PASSWORD }}
+        run: dbt test --target ci
