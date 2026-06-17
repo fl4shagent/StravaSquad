@@ -1,0 +1,13 @@
+version: 2
+
+sources:
+  - name: silver
+    schema: silver
+    database: StravaDW
+    tables:
+      - name: Activities
+      - name: Athlete
+      - name: RunStream
+      - name: RunBest
+      - name: RunSegment
+      - name: RunSplitKilometer

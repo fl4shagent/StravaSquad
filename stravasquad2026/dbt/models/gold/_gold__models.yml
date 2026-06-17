@@ -1,0 +1,31 @@
+version: 2
+
+models:
+  - name: dim_date
+    description: Calendar spine covering silver.Activities date range, padded one week each side.
+    columns:
+      - name: date
+        tests:
+          - unique
+          - not_null
+
+  - name: gold_activity_start_location
+    description: One row per activity with the first GPS point, for map pin visuals.
+    columns:
+      - name: activity_id
+        tests:
+          - unique
+          - not_null
+
+seeds:
+  - name: dim_distance_label
+    description: Ordered list of standard race-distance labels matching silver.RunBest.name.
+    columns:
+      - name: distance_label
+        tests:
+          - unique
+          - not_null
+      - name: sort_order
+        tests:
+          - unique
+          - not_null

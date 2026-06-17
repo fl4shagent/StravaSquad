@@ -1,0 +1,26 @@
+stravadw:
+  target: dev
+  outputs:
+    dev:
+      type: sqlserver
+      driver: 'ODBC Driver 17 for SQL Server'
+      server: 'np:\\.\pipe\sql\query'
+      database: StravaDW
+      schema: dbo
+      windows_login: true
+      encrypt: false
+      trust_cert: true
+      threads: 4
+
+    ci:
+      type: sqlserver
+      driver: 'ODBC Driver 17 for SQL Server'
+      server: localhost
+      port: 1433
+      database: StravaDW
+      schema: dbo
+      user: sa
+      password: "{{ env_var('CI_SQL_PASSWORD', 'placeholder') }}"
+      encrypt: false
+      trust_cert: true
+      threads: 1

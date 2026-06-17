@@ -1,0 +1,37 @@
+version: 2
+
+sources:
+  - name: gold_predictions
+    schema: gold
+    database: StravaDW
+    description: Tables written directly by predict_pb.py (Step 5) — not dbt-built.
+    tables:
+      - name: PBPrediction
+        description: Linear-trend projection of each athlete's RunBest.elapsed_time per distance label.
+        columns:
+          - name: athlete_id
+            tests:
+              - not_null
+          - name: distance_label
+            tests:
+              - not_null
+          - name: prediction_date
+            tests:
+              - not_null
+
+      - name: RaceForecast
+        description: Backtest of Riegel/VDOT/elevation-adjusted race-time forecasts vs real squad race results.
+        columns:
+          - name: athlete_id
+            tests:
+              - not_null
+          - name: target_distance_label
+            tests:
+              - not_null
+          - name: method
+            tests:
+              - accepted_values:
+                  values: ['riegel', 'vdot', 'elevation_adjusted']
+          - name: as_of_date
+            tests:
+              - not_null

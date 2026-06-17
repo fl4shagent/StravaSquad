@@ -1,0 +1,31 @@
+name: dbt CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'stravasquad2026/dbt/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'stravasquad2026/dbt/**'
+
+jobs:
+  dbt-validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dbt-sqlserver
+        run: pip install dbt-sqlserver==1.10.0
+
+      - name: dbt parse — validate project structure and refs
+        working-directory: stravasquad2026/dbt
+        env:
+          DBT_PROFILES_DIR: .
+        run: dbt parse --target ci
